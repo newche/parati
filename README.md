@@ -34,7 +34,7 @@ Quality control (recommended before running PARATI): Filter by call rate and MAF
 
 
 Example: 
-The following is an example for the Trio genotype VCF input, part of the simulated testing set sim_trios_dash_5k_22chr_single.vcf.gz. 
+The following is an example for the Trio genotype VCF input, part of the simulated testing set Toy_TrioGenotype.vcf.gz. 
 ```
 #CHROM	POS	   ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	1-M	1-P	1-B	2-M	2-P	2-B
    1	100000	rs1	 G	 T	 .	   PASS	   .	   GT	    0/0	0/1	0/1	0/0	0/1	0/1
@@ -51,7 +51,7 @@ The following is an example for the Trio genotype VCF input, part of the simulat
 **2. Family index**
 
 Format: .xlsx with three required columns:
-FamilyIndex — family ID, can be integers or characters (e.g., FAM001)
+FamilyIndex — family ID, can be integers or characters (e.g., FAM001 or 1)
 IndividualID — must match a VCF sample column exactly
 Role — one of F (father), M (mother), C (child)
 
@@ -125,7 +125,10 @@ Each dataset:
 
 Note on PLINK output: Because the output encodes only the transmitted or non‑transmitted allele per SNP, alleles are represented as homozygous in standard PLINK format. When computing PRS from these files, use standardized scores (e.g., z‑scores) rather than raw allele counts.
 
+
 # Testing Example:
+
+Testing dataset: Toy_TrioGenotype.vcf.gz is a simulated Trio Genotype dataset with 1000 families and 22 chromosomes. There are in total 5000 SNPs simulated. Format with partial data are shown in the above section. Toy_FamilyIndexTable.xlsx is the trio family index dataset matching to the trio genotype dataset. 
 
 Running test commands:
 ```
@@ -134,10 +137,11 @@ cd PARATI
 
 module load plink/1.9
 
-Rscript PARATI_script.R --geno ./test/Toy_TrioGenotype.vcf.gz --family ./test/Toy_FamilyIndexTable.xlsx --out ./ --chr 22 --savetemp T --makebed T
+Rscript PARATI_script.R --geno ./test/Toy_TrioGenotype.vcf.gz --family ./test/Toy_FamilyIndexTable.xlsx --out ./ --chr 1 --savetemp T --makebed T
 
 ```
 
+In the testing results, for example, rs1 (REF=G; ALT=T) for family 1 (1-M for mother; 1-P for father, 1-C for child in family 1) has TT for mother, GT for father, GT for child. Then, in the transmitted allele result, T is for mother in the vcf file, A is for father in the vcf file. While in the non-transmitted allele result, G is for mother in the vcf file, G is for father in the vcf file. Notice, in the plink format output, non-transmitted/transmitted alleles are doubled (to AA or GG) for simplicity when calculating PRS and performing downtream analysis. 
 
 
 
