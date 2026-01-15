@@ -1,0 +1,11 @@
+# Export main functions
+export(parati_run)
+export(haplotype_infer)
+
+# Import functions from other packages
+import(data.table)
+import(stringr)
+import(dplyr)
+import(optparse)
+import(openxlsx)
+import(vcfR)

@@ -1,0 +1,25 @@
+Package: parati
+Type: Package
+Title: PARATI-Patental Allele Transmission Inferences
+Version: 0.99.0
+Authors@R: 
+    person("Jinyi","Che", email = "chejinyi777@gmail.com", role = c("aut", "cre"))
+Description: PARATI infers maternal and paternal transmitted and non‑transmitted alleles from trio genotype data, enabling SNP‑specific analyses of genetic nurture and transgenerational effects.
+License: GPL-3
+Encoding: UTF-8
+RoxygenNote: 7.2.3
+Imports: 
+    data.table,
+    stringr,
+    dplyr,
+    optparse,
+    openxlsx,
+    vcfR,
+    methods
+Suggests: 
+    knitr,
+    rmarkdown,
+    BiocStyle,
+    testthat
+VignetteBuilder: knitr
+biocViews: Genetics, PopulationGenetics, VariantAnnotation, Workflow

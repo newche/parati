@@ -1,0 +1,177 @@
+---
+title: "PARATI: PARental Allele Transmission Inference"
+author: "Jinyi Che"
+date: "`r Sys.Date()`"
+output:
+  BiocStyle::html_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{PARATI Workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Introduction
+
+**PARATI** infers parental transmitted and non-transmitted alleles in trios using phased VCF genotype data. It supports:
+
+1. Homozygous trios
+2. Mixed homozygote/heterozygote trios
+3. Triple heterozygotes using haplotype similarity within ±haplen bp
+
+This allows **SNP-specific analyses of genetic nurture and transgenerational effects**.  
+
+---
+
+## Installation
+
+```r
+# Install from GitHub
+# install.packages("devtools")
+devtools::install_github("newche/PARATI")
+````
+
+---
+
+## Setup
+
+Load the package and required libraries:
+
+library(parati)
+library(data.table)
+
+Set file paths to the included example data:
+
+vcf_file <- system.file("extdata", "Toy_TrioGenotype.vcf.gz", package = "parati")
+fam_file <- system.file("extdata", "Toy_FamilyIndexTable.xlsx", package = "parati")
+out_dir <- file.path(tempdir(), "parati_example")
+dir.create(out_dir, showWarnings = FALSE)
+
+---
+
+## Run PARATI
+
+Run parental haplotype inference for chromosome 1 with default haplotype window (500 kb):
+
+res <- parati_run(
+geno_file = vcf_file,
+fam_file = fam_file,
+out_dir = out_dir,
+chr = 1,
+hap_length = 500000
+)
+
+> **Note:** `eval=FALSE` is used here to avoid running heavy computation during vignette build.
+> Remove `eval=FALSE` to actually run the analysis.
+
+---
+
+## Explore Results
+
+`res` contains:
+
+* `vcf_trans`: parental transmitted genotypes
+* `vcf_nontrans`: parental non-transmitted genotypes
+* `sim_perc_summary`: summary of haplotype similarity calls
+
+Example to view the first 5 rows of transmitted genotypes:
+
+head(res$vcf_trans, 5)
+
+View non-transmitted genotypes:
+
+head(res$vcf_nontrans, 5)
+
+Check haplotype similarity summary:
+
+head(res$sim_perc_summary, 5)
+
+---
+
+## Save Outputs
+
+By default, PARATI saves outputs in VCF format. Optional PLINK outputs can be generated:
+
+# VCF files are automatically saved in `out_dir`
+
+# For PLINK .bed/.bim/.fam files:
+
+# Run parati_run with makebed = TRUE and plink_path specified
+
+---
+
+## Inputs
+
+### 1. Trio genotype VCF
+
+* Format: `.vcf.gz`
+* Standard VCF columns: `CHROM`, `POS`, `ID`, `REF`, `ALT`, `QUAL`, `FILTER`, `INFO`, `FORMAT`
+* Followed by sample columns: father, mother, child for each trio
+* Autosomes & biallelic SNPs only
+* Sample IDs must exactly match `IndividualID` in the family index
+
+Example (partial):
+
+```
+#CHROM POS    ID  REF ALT QUAL FILTER INFO FORMAT 1-M 1-P 1-B 2-M 2-P 2-B
+1       100000 rs1 G   T   .    PASS   .    GT      0/0 0/1 0/1 0/0 0/1 0/1
+1       101000 rs2 A   C   .    PASS   .    GT      0/0 0/1 0/0 0/0 0/0 0/0
+1       102000 rs3 A   T   .    PASS   .    GT      0/0 0/0 0/0 1/1 1/1 0/1
+...
+```
+
+### 2. Family index
+
+* Format: `.xlsx`
+* Columns: `FamilyIndex`, `IndividualID`, `Role` (`F`/`M`/`C`)
+
+Example:
+
+```
+FamilyIndex IndividualID Role
+1           1-M          M
+1           1-P          F
+1           1-B          C
+2           2-M          M
+2           2-P          F
+2           2-B          C
+...
+```
+
+---
+
+## Quick Start Example
+
+Run minimal workflow (VCF outputs):
+
+```bash
+Rscript inst/scripts/parati.R \
+  --geno inst/extdata/Toy_TrioGenotype.vcf.gz \
+  --family inst/extdata/Toy_FamilyIndexTable.xlsx \
+  --chr 1 \
+  --out ./results/
+```
+
+With haplotype window tuning, intermediate files, and PLINK output:
+
+```bash
+Rscript inst/scripts/parati.R \
+  --geno inst/extdata/Toy_TrioGenotype.vcf.gz \
+  --family inst/extdata/Toy_FamilyIndexTable.xlsx \
+  --chr 1 \
+  --out ./results/ \
+  --haplen 500 \
+  --savetemp T \
+  --makebed T \
+  --plink_path /path/to/plink
+```
+
+---
+
+## Notes
+
+* Transmitted/non-transmitted alleles are encoded as homozygous in PLINK outputs for simplicity.
+* Recommended pre-filtering: call rate, MAF, Mendelian errors, autosomal biallelic SNPs.
+* Ensure sample IDs in VCF match family index exactly, case-sensitive.
+
+---
