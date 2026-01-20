@@ -1,5 +1,3 @@
----
-
 # parati
 
 **parati** is an R package and command-line tool for **parent-of-origin–aware haplotype inference in trio genotype data**.
