@@ -39,7 +39,7 @@ haplotype_infer <- function(
   }
 
   # VCF fixed fields
-  info_cols <- names(vcf_dt)[1:9]
+  info_cols <- names(vcf_dt)[seq_len(9)]
 
   # Copy to avoid modifying input by reference
   vcf_working <- data.table::copy(vcf_dt)

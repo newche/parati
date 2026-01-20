@@ -20,11 +20,23 @@ A list containing three data.tables:
 }
 }
 \examples{
-\dontrun{
-haplotype_infer(vcf_dt, chr = 1)
-}
+# Load required package
+library(parati)
+library(data.table)
+
+# Load toy data included in the package
+vcf_file <- system.file("extdata", "Toy_TrioGenotype.vcf.gz", package = "parati")
+fam_file <- system.file("extdata", "Toy_FamilyIndexTable.xlsx", package = "parati")
+vcf_dt <- data.table::fread(vcf_file)
+
+# Run parental haplotype inference
+hap_result <- haplotype_infer(vcf_dt, hap_length = 500)
+
+# Explore results
+head(hap_result$vcf_trans)
+head(hap_result$vcf_nontrans)
+head(hap_result$sim)
 }
 \seealso{
 \code{\link{parati_run}}
 }
-

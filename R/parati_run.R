@@ -40,12 +40,6 @@ parati_run <- function(
   requireNamespace("data.table")
   requireNamespace("openxlsx")
 
-
-  log_msg <- function(msg) {
-    cat(sprintf("[%s] %s\n", Sys.time(), msg))
-  }
-
-
   #source("./parati/R/haplotype_infer.R")
   #source("./parati/R/io_vcf.R")
 
@@ -59,7 +53,7 @@ parati_run <- function(
   vcf_dt <- vcf_dt[CHROM == chr]
   data.table::setnames(vcf_dt, "CHROM", "#CHROM")
 
-  info_cols <- names(vcf_dt)[1:9]
+  info_cols <- names(vcf_dt)[seq_len(9)]
 
   vcf_trans    <- vcf_dt[, ..info_cols]
   vcf_nontrans <- vcf_dt[, ..info_cols]

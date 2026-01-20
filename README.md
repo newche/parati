@@ -1,8 +1,8 @@
 ---
 
-# PARATI
+# parati
 
-**PARATI** is an R package and command-line tool for **parent-of-origin–aware haplotype inference in trio genotype data**.
+**parati** is an R package and command-line tool for **parent-of-origin–aware haplotype inference in trio genotype data**.
 It infers transmitted and non-transmitted parental haplotypes along autosomes using phased windows and supports downstream export to PLINK formats.
 
 PARATI is designed for large-scale trio datasets and can be run directly from the command line or integrated into R workflows.
@@ -46,14 +46,14 @@ PARATI is designed for large-scale trio datasets and can be run directly from th
 
 ```r
 # install.packages("devtools")
-devtools::install_github("newche/PARATI")
+devtools::install_github("newche/parati")
 ```
 
 Or clone manually:
 
 ```bash
-git clone https://github.com/newche/PARATI.git
-cd PARATI
+git clone https://github.com/newche/parati.git
+cd parati
 
 #or
 R CMD INSTALL parati_0.99.0.tar.gz
@@ -213,7 +213,7 @@ Rscript inst/scripts/parati.R \
 
 ## Output
 
-PARATI generates:
+parati generates:
 
 * Per-window inferred haplotypes
 * Transmitted and non-transmitted parental alleles
@@ -235,9 +235,9 @@ GPL-3
 
 ## Citation
 
-If you use PARATI in your research, please cite:
+If you use parati in your research, please cite:
 
-> *PARATI: Parent-of-origin aware haplotype inference for trio genotype data.*
+> *parati: Parent-of-origin aware haplotype inference for trio genotype data.*
 
 ---
 
