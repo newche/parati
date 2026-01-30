@@ -1,0 +1,137 @@
+---
+title: "parati: Parental Allele Transmission Inference"
+author: "Jinyi Che"
+date: "`r Sys.Date()`"
+output:
+    BiocStyle::html_document:
+        toc: true
+vignette: >
+    %\VignetteIndexEntry{parati Workflow}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+---
+## Abstract
+
+**parati** is an R package for inferring parental transmitted and non-transmitted alleles
+in trio genotype data. It fills a gap in current Bioconductor workflows
+for analyzing genetic nurture and transgenerational effects, complementing
+packages such as `VariantAnnotation` and `GenomicRanges` by providing
+SNP-specific transmission inference and haplotype-based analyses.
+
+## Introduction
+
+**parati** infers parental transmitted and non-transmitted alleles in trios using phased VCF genotype data.  
+While Bioconductor packages like `VariantAnnotation` or `snpStats` can manipulate VCFs, they do not provide:
+
+- Automatic inference of transmitted/non-transmitted alleles in trio datasets
+- Haplotype similarity evaluation for triple heterozygotes
+- SNP-specific analysis of genetic nurture and transgenerational effects
+
+parati fills this gap and integrates with Bioconductor workflows by providing outputs that can be converted to `vcfR` or `VCF` objects for downstream analyses.
+
+## Installation
+
+```r
+# Install devtools if not already installed
+# install.packages("devtools")
+
+# Install PARATI from GitHub
+devtools::install_github("newche/parati")
+
+# (If submitted to Bioconductor in future)
+# BiocManager::install("parati")
+
+## Setup
+```r
+library(parati)
+library(data.table)
+library(vcfR) # for conversion to Bioconductor class
+
+# Set file paths to toy example data
+vcf_file <- system.file("extdata", "Toy_TrioGenotype.vcf.gz", package = "parati")
+fam_file <- system.file("extdata", "Toy_FamilyIndexTable.xlsx", package = "parati")
+out_dir <- file.path(tempdir(), "parati_example")
+dir.create(out_dir, showWarnings = FALSE)
+
+## Run PARATI (minimal example)
+```r
+res <- parati_run(
+    geno_file = vcf_file,
+    fam_file = fam_file,
+    out_dir = out_dir,
+    chr = 1,
+    hap_length = 500000
+)
+
+## Explore Results
+```r
+# View transmitted genotypes
+head(res$vcf_trans, 5)
+
+# View non-transmitted genotypes
+head(res$vcf_nontrans, 5)
+
+# Haplotype similarity summary
+head(res$sim_perc_summary, 5)
+
+## Convert to Bioconductor vcfR object
+```r
+# Example metadata (can be empty for toy example)
+meta <- list(
+    fileformat = "VCFv4.3",
+    source = "PARATI toy example"
+)
+
+vcf_trans_obj <- vcf_dt_to_vcfR(res$vcf_trans, meta)
+vcf_nontrans_obj <- vcf_dt_to_vcfR(res$vcf_nontrans, meta)
+
+# downstream example using vcfR
+geno_mat <- extract.gt(vcf_trans_obj, element="GT")
+head(geno_mat, 5)
+
+## Optional: Export to PLINK format
+#```r
+# Uncomment and set plink_path if you have PLINK installed
+#vcf_to_plink(
+#   vcf_trans = res$vcf_trans,
+#   vcf_nontrans = res$vcf_nontrans,
+#   out_dir = out_dir,
+#   chr = 1,
+#   plink_path = "plink"
+# )
+
+```markdown
+## Inputs
+
+### 1. Trio genotype VCF
+
+* Format: `.vcf.gz`
+* Standard VCF columns: `CHROM`, `POS`, `ID`, `REF`, `ALT`, `QUAL`, `FILTER`, `INFO`, `FORMAT`
+* Followed by sample columns: father, mother, child for each trio
+* Autosomes & biallelic SNPs only
+* Sample IDs must exactly match `IndividualID` in the family index
+
+### 2. Family index table
+
+* Format: `.xlsx`
+* Columns: `FamilyIndex`, `IndividualID`, `Role` (`F`/`M`/`C`)
+## Quick Start (CLI example)
+
+```bash
+Rscript inst/scripts/parati.R \
+  --geno inst/extdata/Toy_TrioGenotype.vcf.gz \
+  --family inst/extdata/Toy_FamilyIndexTable.xlsx \
+  --chr 1 \
+  --out ./results/
+
+```markdown
+## Notes
+
+* Transmitted/non-transmitted alleles are encoded as homozygous in PLINK outputs for simplicity.
+* Recommended pre-filtering: call rate, MAF, Mendelian errors, autosomal biallelic SNPs.
+* Ensure sample IDs in VCF match family index exactly, case-sensitive.
+
+## Session Info
+
+```{r session-info}
+sessionInfo()

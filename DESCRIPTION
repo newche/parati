@@ -1,0 +1,28 @@
+Package: parati
+Type: Package
+Title: parati-Patental Allele Transmission Inferences
+Version: 0.99.0
+Authors@R: 
+    person("Jinyi","Che", email = "chejinyi777@gmail.com", role = c("aut", "cre"))
+Description: 
+     parati infers maternal and paternal transmitted and non-transmitted alleles from trio genotype data. It allows SNP-specific analyses of genetic nurture and transgenerational effects. Input files include a trio VCF and a family index table. Outputs include transmitted/non-transmitted VCFs and optional PLINK files. The package supports evaluation of haplotype similarity within user-defined windows.
+URL: https://github.com/newche/parati
+BugReports: https://github.com/newche/parati/issues
+License: GPL-3 + file LICENSE
+Encoding: UTF-8
+RoxygenNote: 7.3.3
+Imports: 
+    data.table,
+    stringr,
+    dplyr,
+    optparse,
+    openxlsx,
+    vcfR,
+    methods
+Suggests: 
+    knitr,
+    rmarkdown,
+    BiocStyle,
+    testthat
+VignetteBuilder: knitr
+biocViews: Software, Genetics, ResearchField

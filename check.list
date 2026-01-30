@@ -1,0 +1,20 @@
+# 4️⃣ 提交前自检清单（Bioconductor 提交清单）
+
+| 检查项 | 说明 | 是否完成 |
+|---|---|---|
+| 包结构 | R/, inst/, tests/, man/, vignettes/ | ✅ |
+| DESCRIPTION | 正确填写 Imports/Suggests/biocViews | ✅ |
+| LICENSE | MIT 文件存在 | ✅ |
+| NAMESPACE | 使用 `roxygen2::roxygenise()` 生成 | ✅ |
+| R 代码函数化 | 所有逻辑封装函数，CLI 仅调用 | ✅ |
+| VCF & PLINK 依赖 | plink 用 `Sys.which` 检查 | ✅ |
+| 文档 | 所有导出函数都有 roxygen 文档 | ✅||
+| vignette | 初稿完成，包含 Toy 数据示例 | ✅ |
+| 单元测试 | testthat 至少覆盖主流程 | ✅|
+| 示例数据 | inst/extdata 有 Toy 数据 | ✅ |
+| README | 简要说明安装 & 使用 | ✅|
+| 构建 & 检查 | `R CMD build .` / `R CMD check .` | ✅|
+| BiocCheck | `BiocCheck::BiocCheck(".")` | ✅|
+| 压缩大小 | 包含 extdata 需 < 5MB | ✅ |
+
+> ⚠️ “是否完成” 中标记 ⚠️ 的，需要你在提交前跑 `roxygen2`, `testthat` 和 `BiocCheck` 确认。  

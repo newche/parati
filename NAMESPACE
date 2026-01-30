@@ -1,0 +1,12 @@
+# Export main functions
+export(parati_run)
+export(haplotype_infer)
+
+# Import functions from other package
+importFrom(data.table, data.table, fread, setnames, copy, rbindlist, fwrite, is.data.table)
+importFrom(stringr, str_detect, str_split)
+importFrom(dplyr, select, mutate, filter, arrange)
+importFrom(optparse, OptionParser, make_option)
+importFrom(openxlsx, read.xlsx, write.xlsx)
+importFrom(vcfR, read.vcfR, write.vcf)
+import(methods)
