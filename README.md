@@ -227,7 +227,7 @@ Output files are organized by chromosome and haplotype window.
 
 ## License
 
-GPL-3
+GPL-3 + file LICENSE
 
 ---
 
