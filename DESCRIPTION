@@ -1,28 +1,29 @@
 Package: parati
 Type: Package
-Title: parati-Patental Allele Transmission Inferences
-Version: 0.99.0
+Title: Parental Allele Transmission Inference for Trio Genotype Data
+Version: 0.99.8
 Authors@R: 
-    person("Jinyi","Che", email = "chejinyi777@gmail.com", role = c("aut", "cre"))
+    person("Jinyi", "Che", email = "chejinyi777@gmail.com", role = c("aut", "cre"))
 Description: 
-     parati infers maternal and paternal transmitted and non-transmitted alleles from trio genotype data. It allows SNP-specific analyses of genetic nurture and transgenerational effects. Input files include a trio VCF and a family index table. Outputs include transmitted/non-transmitted VCFs and optional PLINK files. The package supports evaluation of haplotype similarity within user-defined windows.
+    Infers maternal and paternal transmitted and non-transmitted alleles
+    from phased trio genotype data. The package supports SNP-level analyses
+    of genetic nurture and transgenerational effects. It interoperates with
+    Bioconductor VCF infrastructure through support for
+    VariantAnnotation::VCF objects and returns R objects for downstream
+    analysis.
 URL: https://github.com/newche/parati
 BugReports: https://github.com/newche/parati/issues
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 RoxygenNote: 7.3.3
-Imports: 
-    data.table,
-    stringr,
-    dplyr,
-    optparse,
-    openxlsx,
-    vcfR,
-    methods
-Suggests: 
-    knitr,
-    rmarkdown,
-    BiocStyle,
-    testthat
+Imports: data.table, methods, openxlsx, R.utils, vcfR,
+        VariantAnnotation, SummarizedExperiment, BiocGenerics,
+        GenomeInfoDb
+Suggests: BiocStyle, knitr, optparse, rmarkdown, testthat (>= 3.0.0),
+        waldo
 VignetteBuilder: knitr
-biocViews: Software, Genetics, ResearchField
+biocViews: Genetics, SNP, Sequencing, VariantAnnotation, Software
+NeedsCompilation: no
+Packaged: 2026-04-12 12:51:45 UTC; liangyong
+Author: Jinyi Che [aut, cre]
+Maintainer: Jinyi Che <chejinyi777@gmail.com>
