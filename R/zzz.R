@@ -1,10 +1,12 @@
-utils::globalVariables(
-  c(":=")
-)
+#' @importFrom data.table :=
+#' @keywords internal
+NULL
+
+.datatable.aware <- TRUE
 
 if (getRversion() >= "2.15.1") {
   utils::globalVariables(c(
-    "..info_cols", "..cols_to_merge", "..cols_to_merge_nontrans",
-    "M", "P", "B", "CHROM", "FamilyIndex", "Role_BMP", "vcf_to_plink"
-  ))
+    "M", "P", "B",
+   "FamilyIndex", "IndividualID", "Role", "Role_BMP" 
+ ))
 }
