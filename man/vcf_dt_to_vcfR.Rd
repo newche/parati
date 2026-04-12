@@ -4,16 +4,24 @@
 \alias{vcf_dt_to_vcfR}
 \title{Convert data.table to vcfR object}
 \usage{
-vcf_dt_to_vcfR(df, meta)
+vcf_dt_to_vcfR(df, meta = character())
 }
 \arguments{
-\item{df}{data.table containing VCF rows}
+\item{df}{A `data.table` containing VCF rows.}
 
-\item{meta}{list of meta information for VCF}
+\item{meta}{Character vector of VCF meta lines.}
 }
 \value{
-vcfR object
+A `vcfR` object.
 }
 \description{
-Converts a data.table representing VCF rows into a vcfR object.
+Converts a `data.table` representing VCF rows into a `vcfR` object.
+}
+\examples{
+vcf_file <- system.file("extdata", "Toy_TrioGenotype.vcf.gz", package = "parati")
+vcf_dt <- read_vcf_by_chr(vcf_file, chr = 1)
+vcf_obj <- vcf_dt_to_vcfR(vcf_dt)
+class(vcf_obj)
+stopifnot(inherits(vcf_obj, "vcfR"))
+
 }
